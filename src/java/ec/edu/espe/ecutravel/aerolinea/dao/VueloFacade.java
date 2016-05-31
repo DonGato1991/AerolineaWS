@@ -20,7 +20,7 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class VueloFacade extends AbstractFacade<Vuelo> {
 
-    @PersistenceContext(unitName = "AerolineaWSPU")
+    @PersistenceContext(unitName = "AerolineaTameWSPU")
     private EntityManager em;
 
     @Override

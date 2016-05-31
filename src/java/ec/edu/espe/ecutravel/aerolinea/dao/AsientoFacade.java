@@ -17,7 +17,7 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class AsientoFacade extends AbstractFacade<Asiento> {
     
-    @PersistenceContext(unitName = "AerolineaWSPU")
+    @PersistenceContext(unitName = "AerolineaTameWSPU")
     private EntityManager em;
     
     @Override

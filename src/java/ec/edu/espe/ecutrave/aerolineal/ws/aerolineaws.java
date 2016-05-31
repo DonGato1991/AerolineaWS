@@ -24,7 +24,8 @@ import javax.jws.WebParam;
  *
  * @author JuanAndresCaspi
  */
-@WebService(serviceName = "aerolineaws")
+@WebService(serviceName = "aerolineaTamews")
+//aerolineaTamews victor
 public class aerolineaws {
 
     @EJB

@@ -7,8 +7,8 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="AerolineaWS" default="default" basedir=".">
-    <description>Builds, tests, and runs the project AerolineaWS.</description>
+<project name="AerolineaTameWS" default="default" basedir=".">
+    <description>Builds, tests, and runs the project AerolineaTameWS.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
 
