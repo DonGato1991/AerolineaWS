@@ -9,12 +9,10 @@ import ec.edu.espe.ecutravel.aerolinea.controllers.AsientoController;
 import ec.edu.espe.ecutravel.aerolinea.controllers.BoletoController;
 import ec.edu.espe.ecutravel.aerolinea.controllers.VueloController;
 import ec.edu.espe.ecutravel.aerolinea.entities.Asiento;
-import ec.edu.espe.ecutravel.aerolinea.entities.Boleto;
 import ec.edu.espe.ecutravel.aerolinea.entities.Vuelo;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.Timestamp;
-import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -39,49 +37,71 @@ public class aerolineaws {
     private BoletoController boletoController;
 
     @WebMethod(operationName = "obtenerInfoVuelos")
-    public List<Vuelo> obtenerInfoVuelos() {
+    private List<Vuelo> obtenerInfoVuelos() {
         return vueloController.retrieveVuelos();
     }
 
     @WebMethod(operationName = "insertVueloByParam")
-    private boolean insertVueloByParam(@WebParam(name = "inicio") String inicio, @WebParam(name = "fin") String fin, @WebParam(name = "origen") String origen, @WebParam(name = "destino") String destino) {
+    private boolean insertVueloByParam(
+            @WebParam(name = "mes") String mesE,
+            @WebParam(name = "anio") String anioE,
+            @WebParam(name = "origen") String origen,
+            @WebParam(name = "destino") String destino) {
+        int anio = Integer.parseInt(anioE);
+        //mes le toma desde el 0
+        int mes = Integer.parseInt(mesE);
+        for (int i = 0; i < 30; i++) {
+            int hora = 8;
+            int dia = i + 1;
+            for (int j = 0; j < 5; j++) {
+                Calendar c = Calendar.getInstance();
+                c.set(anio, mes, dia, hora, 0);
+                Vuelo vuelo = new Vuelo();
+                vuelo.setFechaInicio(c.getTime());
+                hora = hora + 3;
+                c.set(anio, mes, dia, hora, 0);
+                vuelo.setFechaFin(c.getTime());
+                vuelo.setPrecio(new BigDecimal("75"));
+                vuelo.setCiudadOrigen(origen);
+                vuelo.setCiudadDestino(destino);
+                vuelo.setAerolinea("TAME");
+                vueloController.registrarVuelo(vuelo);
+            }
+        }
 
-        Vuelo vuelo = new Vuelo();
-        vuelo.setFechaFin(new Date(fin));
-        vuelo.setFechaInicio(new Date(inicio));
-        vuelo.setPrecio(new BigDecimal("65.99"));
-        vuelo.setCiudadOrigen(origen);
-        vuelo.setCiudadDestino(destino);
-        vuelo.setAerolinea("AVIANCA");
-        vueloController.registrarVuelo(vuelo);
         return true;
     }
 
     @WebMethod(operationName = "retrieveVuelosByPara")
     public List<Vuelo> retrieveVuelosByPara(
-            @WebParam(name = "inicio") String inicio, 
-            @WebParam(name = "fin") String fin, 
-            @WebParam(name = "origen") String origen, 
-            @WebParam(name = "destino") String destino, 
+            @WebParam(name = "inicio") String inicio,
+            @WebParam(name = "fin") String fin,
+            @WebParam(name = "origen") String origen,
+            @WebParam(name = "destino") String destino,
             @WebParam(name = "numPer") String numPer) {
         return vueloController.retrieveVuelosByPara(inicio, fin, origen, destino, numPer);
     }
 
     @WebMethod(operationName = "genericMethod")
-    private void genericMethod(@WebParam(name = "origen") String origen) {
+    private boolean genericMethod(@WebParam(name = "origen") String origen) {
+        Asiento asiento;
+        for (int i = 0; i < 30; i++) {
+            asiento = new Asiento();
+            asiento.setNumero(BigInteger.valueOf(i + 1));
+            asientoController.registrarAsiento(asiento);
+        }
         System.out.println("");
+        return true;
     }
 
     @WebMethod(operationName = "registrarBoleto")
     public Boolean registrarBoleto(
-            @WebParam(name = "persona") String persona, 
-            @WebParam(name = "paquete") String paquete, 
-            @WebParam(name = "numPersonas") String numPersonas, 
+            @WebParam(name = "persona") String persona,
+            @WebParam(name = "paquete") String paquete,
+            @WebParam(name = "numPersonas") String numPersonas,
             @WebParam(name = "idVuelo") Integer idVuelo) {
         boolean success = false;
-        Vuelo vuelo = new Vuelo();
-        vuelo = vueloController.retrieveVueloBy(idVuelo);
-        boletoController.registrarBoleto(vuelo, persona, paquete, numPersonas);
+        success = boletoController.registrarBoleto(idVuelo, persona, paquete, numPersonas);
         return success;
     }
 }

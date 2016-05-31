@@ -48,24 +48,35 @@ public class BoletoController {
         facade.remove(boleto);
     }
 
-    public Boolean registrarBoleto(Vuelo vuelo, String persona, String paquete, String numPersonas) {
+    public Boolean registrarBoleto(Integer idVuelo, String persona, String paquete, String numPersonas) {
         Boleto boleto = new Boleto();
-        Integer asientoActual = retrieveAsientoOcupadosTotalByIdVuelo(vuelo.getVueCodigo());
-        Integer asientoInicial = asientoActual + 1;
-        Integer asientoFinal = asientoInicial + Integer.parseInt(numPersonas);
-        Asiento asiento;
-        for (int i = asientoInicial; i < asientoFinal; i++) {
-            asiento = new Asiento();
-            boleto = new Boleto();
-            asiento = asientoController.retrieveAsientoByNumero(i);
-            boleto.setAsiCodigo(asiento);
-            boleto.setVueCodigo(vuelo);
-            boleto.setPersona(new BigInteger(persona));
-            boleto.setPaquete(new BigInteger(paquete));
-            facade.create(boleto);
+        boolean success = false;
+        Vuelo vuelo = new Vuelo();
+        vuelo = serviceVuelo.retrieveVueloBy(idVuelo);
+        Integer asientoActual = retrieveAsientoOcupadosTotalByIdVuelo(idVuelo);
+        if (asientoActual != null && vuelo != null) {
+            Integer asientoInicial = asientoActual + 1;
+            Integer asientoFinal = asientoInicial + Integer.parseInt(numPersonas);
+            Asiento asiento;
+            if (asientoFinal < 30) {
+                for (int i = asientoInicial; i < asientoFinal; i++) {
+                    asiento = new Asiento();
+                    boleto = new Boleto();
+                    asiento = asientoController.retrieveAsientoByNumero(i);
+                    boleto.setAsiCodigo(asiento);
+                    boleto.setVueCodigo(vuelo);
+                    boleto.setPersona(new BigInteger(persona));
+                    boleto.setPaquete(new BigInteger(paquete));
+                    facade.create(boleto);
+                }
+                success = true;
+            } else {
+                success = false;
+            }
+        } else {
+            success = false;
         }
-        //TODO
-        return true;
+        return success;
     }
 
     public List<Boleto> retrieveBoletosByIdVuelo(Integer idVuelo) {

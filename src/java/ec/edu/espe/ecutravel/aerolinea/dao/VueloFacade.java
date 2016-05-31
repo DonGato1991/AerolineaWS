@@ -39,7 +39,7 @@ public class VueloFacade extends AbstractFacade<Vuelo> {
 //            vuelos = em.createQuery("SELECT v from Vuelo v where v.ciudadOrigen=:origen AND FUNC('TO_CHAR', v.fechaInicio) like :inicio").setParameter("origen", origen).setParameter("inicio", '%' + inicio + '%')
 //                    .getResultList();
             //vuelos = em.createQuery("SELECT v from Vuelo v where FUNC('TO_CHAR', v.fechaInicio) like :fin ").setParameter("fin", '%' + fin + '%').getResultList();
-            vuelos = em.createQuery("SELECT v from Vuelo v where v.ciudadOrigen=:origen and FUNC('TO_CHAR', v.fechaInicio) like :inicio or v.ciudadDestino=:destino and FUNC('TO_CHAR', v.fechaFin) like :fin ").setParameter("origen", origen).setParameter("inicio", '%' + inicio + '%')
+            vuelos = em.createQuery("SELECT v from Vuelo v where v.ciudadOrigen=:origen and FUNC('TO_CHAR', v.fechaInicio) like :inicio and v.ciudadDestino=:destino or FUNC('TO_CHAR', v.fechaFin) like :fin ").setParameter("origen", origen).setParameter("inicio", '%' + inicio + '%')
                     .setParameter("fin", '%' + fin + '%').setParameter("destino", destino)
                     .getResultList();
         } catch (Exception ex) {
