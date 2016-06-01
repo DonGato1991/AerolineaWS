@@ -7,6 +7,7 @@ package ec.edu.espe.ecutravel.aerolinea.dao;
 
 import ec.edu.espe.ecutravel.aerolinea.entities.Boleto;
 import ec.edu.espe.ecutravel.aerolinea.entities.Vuelo;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -34,8 +35,19 @@ public class BoletoFacade extends AbstractFacade<Boleto> {
 
     public List<Boleto> retrieveBoletosByIdVuelo(Vuelo vuelo) {
         List<Boleto> boletos = new ArrayList<>();
-        boletos= (List<Boleto>)em.createNamedQuery("Boleto.findByVuelo")
+        boletos = (List<Boleto>) em.createNamedQuery("Boleto.findByVuelo")
                 .setParameter("vuelo", vuelo).getResultList();
+        return boletos;
+    }
+
+    public List<Boleto> retrieveBoletosByCedula(String identificacionPersona) {
+        List<Boleto> boletos = new ArrayList<>();
+        try {
+            boletos = (List<Boleto>) em.createNamedQuery("Boleto.findByPersona")
+                    .setParameter("persona", new BigInteger(identificacionPersona)).getResultList();
+        } catch (Exception ex) {
+            System.out.println("Error al traer boletos de: " + identificacionPersona + "desde facade" + ex);
+        }
         return boletos;
     }
 

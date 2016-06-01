@@ -85,6 +85,11 @@ public class BoletoController {
         boletos = facade.retrieveBoletosByIdVuelo(vuelo);
         return boletos;
     }
+    public List<Boleto> retrieveBoletosByIdentiPesona(String identificacion) {
+        List<Boleto> boletos = new ArrayList<>();
+        boletos = facade.retrieveBoletosByCedula(identificacion);
+        return boletos;
+    }
 
     public Integer retrieveAsientoLibresTotalByIdVuelo(Integer idVuelo) {
         Vuelo vuelo = new Vuelo();

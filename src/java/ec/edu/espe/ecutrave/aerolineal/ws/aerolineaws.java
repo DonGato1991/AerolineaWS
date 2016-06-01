@@ -9,11 +9,12 @@ import ec.edu.espe.ecutravel.aerolinea.controllers.AsientoController;
 import ec.edu.espe.ecutravel.aerolinea.controllers.BoletoController;
 import ec.edu.espe.ecutravel.aerolinea.controllers.VueloController;
 import ec.edu.espe.ecutravel.aerolinea.entities.Asiento;
+import ec.edu.espe.ecutravel.aerolinea.entities.Boleto;
 import ec.edu.espe.ecutravel.aerolinea.entities.Vuelo;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.jws.WebService;
@@ -37,8 +38,8 @@ public class aerolineaws {
     @EJB
     private BoletoController boletoController;
 
-    @WebMethod(operationName = "obtenerInfoVuelos")
-    private List<Vuelo> obtenerInfoVuelos() {
+    @WebMethod(operationName = "obtenerAllInfoVuelos")
+    private List<Vuelo> obtenerAllInfoVuelos() {
         return vueloController.retrieveVuelos();
     }
 
@@ -83,8 +84,8 @@ public class aerolineaws {
         return vueloController.retrieveVuelosByPara(inicio, fin, origen, destino, numPer);
     }
 
-    @WebMethod(operationName = "genericMethod")
-    private boolean genericMethod(@WebParam(name = "origen") String origen) {
+    @WebMethod(operationName = "populateSits")
+    private boolean populateSits() {
         Asiento asiento;
         for (int i = 0; i < 30; i++) {
             asiento = new Asiento();
@@ -104,5 +105,13 @@ public class aerolineaws {
         boolean success = false;
         success = boletoController.registrarBoleto(idVuelo, persona, paquete, numPersonas);
         return success;
+    }
+
+    @WebMethod(operationName = "traerBoletosPorPersona")
+    public List<Boleto> traerBoletosPorPersona(
+            @WebParam(name = "persona") String persona) {
+        List<Boleto> boletosRegistrados = new ArrayList();
+        boletosRegistrados = boletoController.retrieveBoletosByIdentiPesona(persona);
+        return boletosRegistrados;
     }
 }
