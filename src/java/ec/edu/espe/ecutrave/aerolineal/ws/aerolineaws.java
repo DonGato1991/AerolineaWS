@@ -37,6 +37,7 @@ public class aerolineaws {
 
     @EJB
     private BoletoController boletoController;
+    //Cambio
 
     @WebMethod(operationName = "obtenerAllInfoVuelos")
     private List<Vuelo> obtenerAllInfoVuelos() {
